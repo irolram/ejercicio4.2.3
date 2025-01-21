@@ -3,7 +3,7 @@ class Persona(var peso: Double, var altura:Double,var nombre:String){
 
     val imc: Double
         get() { //hago un get para poder acceder a él, pero no le hago set para que no se pueda modificar
-            return peso/(altura*altura)
+            return obtenerImc()
         }
     init {
         require(peso>0) {"El peso debe ser mayor que 0"}
@@ -11,7 +11,7 @@ class Persona(var peso: Double, var altura:Double,var nombre:String){
     }
 
 
-    constructor(nombre:String, peso: Double, altura: Double) : this(peso, altura) {
+    constructor(nombre:String, peso: Double, altura: Double) : this(peso, altura, nombre) {
         this.nombre = nombre
 
 
@@ -30,6 +30,10 @@ class Persona(var peso: Double, var altura:Double,var nombre:String){
     override fun hashCode(): Int {
         return javaClass.hashCode()
         TODO("HACERLO")
+    }
+
+    fun obtenerImc(): Double {
+        return peso/(altura*altura)
     }
 
     fun pedir_nombre(): String {
@@ -57,14 +61,35 @@ class Persona(var peso: Double, var altura:Double,var nombre:String){
         }
     }
     fun ObtenerDescImc(){
+        if(imc< 18.5){
+            println("Peso insuficiente")
+        }
+        if (imc >= 18.5 && imc <24.9){
+            println("Peso saludable")
+        }
+        if (imc >= 24.9 && imc < 29.9){
+            println("Sobrepeso")
+        }
+        if(imc> 29.9){
+            println("Obesidad")
+        }
 
+    }
+
+
+    fun obtener_desc():String{
+        val calcImc = obtenerImc()
+        val descAltura = if(alturaEncimaMedia())"Por encima de la media" else "Por debajo de la media"
+        val descPeso = if(pesoEncimaMedia())"Peso por debajo de la media" else "Peso por encima de la media"
+        return "$nombre con una altura de ${"%.2f".format(altura)}m ($descAltura) y un peso de ${"%.1f".format(peso)}kg ($descPeso) tiene un IMC de ${"%.2f".format(imc)} ($calcImc)."
     }
 }
 
 
 
+
 fun main() {
-    val persona1 = Persona(60.0,1.50,"Ivan")
-    persona1.saludar()
-    persona1.alturaEncimaMedia()
+    val persona1 = Persona(64.7, 1.72, "Julia")
+    println(persona1.saludar())
+    println(persona1.obtener_desc())
 }
